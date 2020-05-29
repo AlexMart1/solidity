@@ -1784,4 +1784,25 @@ void CommandLineInterface::outputCompilationResults()
 	}
 }
 
+size_t CommandLineInterface::countEnabledOptions(vector<string> const& _optionNames) const
+{
+	size_t count = 0;
+	for (string const& _option: _optionNames)
+		count += m_args.count(_option);
+
+	return count;
+}
+
+string CommandLineInterface::joinOptionNames(vector<string> const& _optionNames, string _separator)
+{
+	if (_optionNames.size() == 0)
+		return "";
+
+	string result;
+	for (string const& _option: _optionNames)
+		result += (_option == _optionNames[0] ? "" : _separator) + "--" + _option;
+
+	return result;
+}
+
 }
