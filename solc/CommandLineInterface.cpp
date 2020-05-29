@@ -68,6 +68,7 @@
 	#include <unistd.h>
 #endif
 
+#include <numeric>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -1038,6 +1039,21 @@ bool CommandLineInterface::processInput()
 				filesystem_path.remove_filename();
 			m_allowedDirectories.push_back(filesystem_path);
 		}
+	}
+
+	vector<string> const exclusiveModes = {
+		g_argStandardJSON,
+		g_argLink,
+		g_argAssemble,
+		g_argStrictAssembly,
+		g_argYul,
+		g_argImportAst,
+	};
+	if (countEnabledOptions(exclusiveModes) > 1)
+	{
+		serr() << "The following options are all mutually exclusive: " << joinOptionNames(exclusiveModes) << ". ";
+		serr() << "Select at most one." << endl;
+		return false;
 	}
 
 	if (m_args.count(g_argStandardJSON))
